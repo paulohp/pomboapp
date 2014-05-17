@@ -120,17 +120,17 @@ module.exports = function(grunt) {
 
   // Testing
   // -------
-  grunt.registerTask('test', "Run your apps's tests once. Uses Google Chrome by default.", [
-                     'clean:debug', 'build:debug', 'testem:ci:basic' ]);
-
-  grunt.registerTask('test:ci', "Run your app's tests in PhantomJS. For use in continuous integration (i.e. Travis CI).", [
-                     'clean:debug', 'build:debug', 'testem:ci:basic' ]);
-
-  grunt.registerTask('test:browsers', "Run your app's tests in multiple browsers (see tasks/options/testem.js for configuration).", [
-                     'clean:debug', 'build:debug', 'testem:ci:browsers' ]);
-
-  grunt.registerTask('test:server', "Alias to `testem:run:basic`. Be sure to install testem first using `npm install -g testem`", [
-                     'testem:run:basic' ]);
+  // grunt.registerTask('test', "Run your apps's tests once. Uses Google Chrome by default.", [
+  //                    'clean:debug', 'build:debug', 'testem:ci:basic' ]);
+  //
+  // grunt.registerTask('test:ci', "Run your app's tests in PhantomJS. For use in continuous integration (i.e. Travis CI).", [
+  //                    'clean:debug', 'build:debug', 'testem:ci:basic' ]);
+  //
+  // grunt.registerTask('test:browsers', "Run your app's tests in multiple browsers (see tasks/options/testem.js for configuration).", [
+  //                    'clean:debug', 'build:debug', 'testem:ci:browsers' ]);
+  //
+  // grunt.registerTask('test:server', "Alias to `testem:run:basic`. Be sure to install testem first using `npm install -g testem`", [
+  //                    'testem:run:basic' ]);
 
   // Worker tasks
   // =================================
