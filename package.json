@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/paulohp/pomboapp/issues"
   },
-  "homepage": "https://github.com/paulohp/pomboapp"
+  "homepage": "https://github.com/paulohp/pomboapp",
+  "dependencies": {
+    "express": "^4.0.0"
+  }
 }
