@@ -48,8 +48,15 @@ router.post('/upload', function(req, res) {
   });
 });
 
-router.get('/download', function(req, res){
-
+router.get('/download/:name', function(req, res){
+  console.log(req.params.name);
+  res.download(__dirname+'/uploads/'+req.params.name,  function(err){
+    if (err) {
+      console.log(err);;
+    } else {
+      console.log("Lol")
+    }
+  });
 });
 // REGISTER OUR ROUTES -------------------------------
 // all of our routes will be prefixed with /api
