@@ -46,8 +46,11 @@ router.post('/upload', function(req, res) {
     // res.write('\n\n');
     // res.end('received files:\n\n '+util.inspect(files));
   });
-})
+});
 
+router.get('/download', function(req, res){
+
+});
 // REGISTER OUR ROUTES -------------------------------
 // all of our routes will be prefixed with /api
 app.use('/', router);
