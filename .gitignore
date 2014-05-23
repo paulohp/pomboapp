@@ -9,3 +9,5 @@ Thumbs.db
 
 #unecessary dirs
 /uploads/*
+
+npm-debug.log
