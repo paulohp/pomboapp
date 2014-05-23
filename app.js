@@ -3,11 +3,12 @@
 // BASE SETUP
 // =============================================================================
 
-var express    = require('express');
-var app        = express();
-var bodyParser = require('body-parser');
-var multiparty = require('multiparty');
-var fs         = require('fs');
+var express    = require('express'),
+    app        = express(),
+    bodyParser = require('body-parser'),
+    multiparty = require('multiparty'),
+    fs         = require('fs'),
+    atomic     = require('atomic-write-stream');
 
 // this will let us get the data from a POST
 app.use(bodyParser());
@@ -32,29 +33,18 @@ router.get('/', function(req, res) {
 
 router.post('/upload', function(req, res) {
   var form = new multiparty.Form({autoFiles: true, uploadDir: __dirname+'/uploads'});
-
   form.parse(req, function(err, fields, files) {
-    console.log(files);
     res.send(200)
-    // if (err) {
-    //   res.writeHead(400, {'content-type': 'text/plain'});
-    //   res.end("invalid request: " + err.message);
-    //   return;
-    // }
-    // res.writeHead(200, {'content-type': 'text/plain'});
-    // res.write('received fields:\n\n '+util.inspect(fields));
-    // res.write('\n\n');
-    // res.end('received files:\n\n '+util.inspect(files));
   });
 });
 
 router.get('/download/:name', function(req, res){
-  console.log(req.params.name);
-  res.download(__dirname+'/uploads/'+req.params.name,  function(err){
+  var file = __dirname+'/uploads/'+req.params.name;
+  res.download(file,  function(err){
     if (err) {
-      console.log(err);;
+      throw new Error(err);
     } else {
-      console.log("Lol")
+      fs.createReadStream(file).pipe(atomicWriteStream(file));
     }
   });
 });

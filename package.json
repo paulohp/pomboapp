@@ -17,8 +17,9 @@
   },
   "homepage": "https://github.com/paulohp/pomboapp",
   "dependencies": {
-    "express": "^4.0.0",
+    "atomic-write-stream": "0.0.0",
     "body-parser": "^1.0.1",
+    "express": "^4.0.0",
     "jade": "*",
     "multiparty": "^3.2.6"
   }
