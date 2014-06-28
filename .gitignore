@@ -11,3 +11,5 @@ Thumbs.db
 /uploads/*
 
 npm-debug.log
+
+/keys/*

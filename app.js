@@ -5,10 +5,14 @@
 
 var express    = require('express'),
     app        = express(),
+    _          = require('lodash'),
     bodyParser = require('body-parser'),
     multiparty = require('multiparty'),
     fs         = require('fs'),
-    atomic     = require('atomic-write-stream');
+    rsa        = require('rsa-stream'),
+    pubkey     = fs.readFileSync('./keys/minhaPubKey.pub', 'utf8'),
+    encStream  = rsa.encrypt(pubkey);
+
 
 // this will let us get the data from a POST
 app.use(bodyParser());
@@ -34,6 +38,14 @@ router.get('/', function(req, res) {
 router.post('/upload', function(req, res) {
   var form = new multiparty.Form({autoFiles: true, uploadDir: __dirname+'/uploads'});
   form.parse(req, function(err, fields, files) {
+    if (err) throw err;
+    _.map(files, function(file){
+      _.each(file, function(f){
+        var inStream = fs.createReadStream(f.path);
+        var outStream  = fs.createWriteStream(f.originalFilename+'.enc');
+        inStream.pipe(encStream).pipe(outStream);
+      })
+    })
     res.send(200)
   });
 });
@@ -41,11 +53,7 @@ router.post('/upload', function(req, res) {
 router.get('/download/:name', function(req, res){
   var file = __dirname+'/uploads/'+req.params.name;
   res.download(file,  function(err){
-    if (err) {
-      throw new Error(err);
-    } else {
-      fs.createReadStream(file).pipe(atomicWriteStream(file));
-    }
+    if (err) throw new Error(err);
   });
 });
 // REGISTER OUR ROUTES -------------------------------
