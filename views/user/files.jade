@@ -1,0 +1,17 @@
+extends layout
+
+block content
+  .container
+    span.btn.btn-success.fileinput-button
+      span + Upload Files
+      input#fileupload(type='file', name='file', data-url='/upload', multiple)
+    br
+    br
+    .progress.progress-striped.active
+      .progress-bar.progress-bar-success
+    br
+    br
+    ul
+      each file in files
+        li= file
+          a(class='btn btn-danger', href='/download/'+file) Download

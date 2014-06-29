@@ -18,7 +18,8 @@ var express      = require('express'),
     morgan       = require('morgan'),
     cookieParser = require('cookie-parser'),
     session      = require('express-session'),
-    configDB = require('./config/database.js');
+    configDB     = require('./config/database.js');
+
 
 // configuration ===============================================================
 mongoose.connect(configDB.url); // connect to our database
@@ -42,6 +43,7 @@ var port = process.env.PORT || 8080;    // set our port
 
 
 // routes ======================================================================
+require('./config/passport')(passport); // pass passport for configuration
 require('./app/routes.js')(app, express, passport, fs); // load our routes and pass in our app and fully configured passport
 
 // START THE SERVER
