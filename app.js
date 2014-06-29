@@ -9,9 +9,6 @@ var express      = require('express'),
     bodyParser   = require('body-parser'),
     multiparty   = require('multiparty'),
     fs           = require('fs'),
-    rsa          = require('rsa-stream'),
-    pubkey       = fs.readFileSync('./keys/minhaPubKey.pub', 'utf8'),
-    encStream    = rsa.encrypt(pubkey),
     mongoose     = require('mongoose'),
     passport     = require('passport'),
     flash        = require('connect-flash'),
@@ -44,7 +41,7 @@ var port = process.env.PORT || 8080;    // set our port
 
 // routes ======================================================================
 require('./config/passport')(passport); // pass passport for configuration
-require('./app/routes.js')(app, express, passport, fs); // load our routes and pass in our app and fully configured passport
+require('./app/routes.js')(app, express, passport, fs, multiparty, _); // load our routes and pass in our app and fully configured passport
 
 // START THE SERVER
 // =============================================================================
