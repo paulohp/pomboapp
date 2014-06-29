@@ -1,0 +1,17 @@
+.logo{
+  float:left;
+}
+.logo h1{
+  font-family: 'Oleo Script', cursive;
+}
+.header{
+  margin-bottom: 20px;
+  min-height: 80px;
+}
+.header .nav{
+  float: right;
+  margin-top: 21px;
+}
+.blue{
+  color: blue;
+}

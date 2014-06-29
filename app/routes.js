@@ -10,7 +10,7 @@ module.exports = function(app, express, passport, fs, multiparty, _){
   });
 
   router.post('/upload', function(req, res) {
-    var form = new multiparty.Form({autoFiles: true, uploadDir: '../data/'+req.user._id+'/uploads'});
+    var form = new multiparty.Form({autoFiles: true, uploadDir: '../data/'+req.user._id+'/originals'});
     form.parse(req, function(err, fields, files) {
       if (err) throw err;
       _.map(files, function(file){

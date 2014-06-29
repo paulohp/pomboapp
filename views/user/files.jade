@@ -2,6 +2,19 @@ extends ../layout
 
 block content
   .container
+    .header
+      .logo
+        h1 Pombo
+          span.blue APP
+      ul.nav.nav-pills
+        -if(loggedIn)
+          li
+            a(href='/profile') Profile
+          li
+            a(href='/files') Files
+          li
+            a(href='/logout') Logout
+
     span.btn.btn-success.fileinput-button
       span + Upload Files
       input#fileupload(type='file', name='file', data-url='/upload', multiple)

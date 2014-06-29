@@ -35,6 +35,10 @@ app.use(flash()); // use connect-flash for flash messages stored in session
 app.set('views', __dirname + '/views');
 app.set('view engine', 'jade');
 app.use(express.static(__dirname + '/public'))
+app.use(function (req, res, next) {
+  res.locals.loggedIn = req.isAuthenticated();
+  next();
+});
 
 var port = process.env.PORT || 8080;    // set our port
 
