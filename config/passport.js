@@ -70,6 +70,7 @@ module.exports = function(passport) {
           if (err)
             throw err;
           fs.mkdir('../data/'+user._id, function(err){
+            if (err) {throw err};
             return done(null, newUser);
           });
         });

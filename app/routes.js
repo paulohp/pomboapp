@@ -75,7 +75,7 @@ module.exports = function(app, express, passport, fs){
   });
 
   router.get('/files', isLoggedIn, function(req, res) {
-    fs.readdir('./uploads', function(err, files){
+    fs.readdir('../data/'+req.user._id, function(err, files){
       if (err) throw err;
       res.render('user/files', {
         files: files
