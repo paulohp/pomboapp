@@ -3,19 +3,36 @@
 // BASE SETUP
 // =============================================================================
 
-var express    = require('express'),
-    app        = express(),
-    _          = require('lodash'),
-    bodyParser = require('body-parser'),
-    multiparty = require('multiparty'),
-    fs         = require('fs'),
-    rsa        = require('rsa-stream'),
-    pubkey     = fs.readFileSync('./keys/minhaPubKey.pub', 'utf8'),
-    encStream  = rsa.encrypt(pubkey);
+var express      = require('express'),
+    app          = express(),
+    _            = require('lodash'),
+    bodyParser   = require('body-parser'),
+    multiparty   = require('multiparty'),
+    fs           = require('fs'),
+    rsa          = require('rsa-stream'),
+    pubkey       = fs.readFileSync('./keys/minhaPubKey.pub', 'utf8'),
+    encStream    = rsa.encrypt(pubkey),
+    mongoose     = require('mongoose'),
+    passport     = require('passport'),
+    flash        = require('connect-flash'),
+    morgan       = require('morgan'),
+    cookieParser = require('cookie-parser'),
+    session      = require('express-session'),
+    configDB = require('./config/database.js');
 
+// configuration ===============================================================
+mongoose.connect(configDB.url); // connect to our database
 
-// this will let us get the data from a POST
-app.use(bodyParser());
+// set up our express application
+app.use(morgan('dev')); // log every request to the console
+app.use(cookieParser()); // read cookies (needed for auth)
+app.use(bodyParser()); // get information from html forms
+
+// required for passport
+app.use(session({ secret: 'ilovepornsomuch' })); // session secret
+app.use(passport.initialize());
+app.use(passport.session()); // persistent login sessions
+app.use(flash()); // use connect-flash for flash messages stored in session
 
 app.set('views', __dirname + '/views');
 app.set('view engine', 'jade');
@@ -24,41 +41,8 @@ app.use(express.static(__dirname + '/public'))
 var port = process.env.PORT || 8080;    // set our port
 
 
-var router = express.Router();
-
-router.get('/', function(req, res) {
-  fs.readdir(__dirname+'/uploads', function(err, files){
-    if (err) throw err;
-    res.render('index', {
-      files: files
-    });
-  })
-});
-
-router.post('/upload', function(req, res) {
-  var form = new multiparty.Form({autoFiles: true, uploadDir: __dirname+'/uploads'});
-  form.parse(req, function(err, fields, files) {
-    if (err) throw err;
-    _.map(files, function(file){
-      _.each(file, function(f){
-        var inStream = fs.createReadStream(f.path);
-        var outStream  = fs.createWriteStream(f.originalFilename+'.enc');
-        inStream.pipe(encStream).pipe(outStream);
-      })
-    })
-    res.send(200)
-  });
-});
-
-router.get('/download/:name', function(req, res){
-  var file = __dirname+'/uploads/'+req.params.name;
-  res.download(file,  function(err){
-    if (err) throw new Error(err);
-  });
-});
-// REGISTER OUR ROUTES -------------------------------
-// all of our routes will be prefixed with /api
-app.use('/', router);
+// routes ======================================================================
+require('./app/routes.js')(app, express, passport, fs); // load our routes and pass in our app and fully configured passport
 
 // START THE SERVER
 // =============================================================================
