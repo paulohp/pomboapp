@@ -16,7 +16,8 @@
     "url": "https://github.com/paulohp/pomboapp/issues"
   },
   "engines": {
-    "node": ">= 0.10.28"
+    "npm": "1.4.18",
+    "node": "0.10.28"
   },
   "homepage": "https://github.com/paulohp/pomboapp",
   "dependencies": {
