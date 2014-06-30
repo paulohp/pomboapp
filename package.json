@@ -6,6 +6,10 @@
   "scripts": {
     "test": "test"
   },
+  "engines": {
+    "npm": "1.4.18",
+    "node": "0.10.28"
+  },
   "repository": {
     "type": "git",
     "url": "git://github.com/paulohp/pomboapp.git"
@@ -14,10 +18,6 @@
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/paulohp/pomboapp/issues"
-  },
-  "engines": {
-    "npm": "1.4.18",
-    "node": "0.10.28"
   },
   "homepage": "https://github.com/paulohp/pomboapp",
   "dependencies": {
