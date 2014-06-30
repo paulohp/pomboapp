@@ -43,12 +43,12 @@ app.use(function (req, res, next) {
 var port =  process.env.OPENSHIFT_NODEJS_PORT || 8080;
 var ipaddress = process.env.OPENSHIFT_NODEJS_IP || '127.0.0.1';
 
-
 // routes ======================================================================
 require('./config/passport')(passport); // pass passport for configuration
 require('./app/routes.js')(app, express, passport, fs, multiparty, _); // load our routes and pass in our app and fully configured passport
 
 // START THE SERVER
 // =============================================================================
-app.listen(port);
-console.log('Magic happens on port ' + port);
+app.listen(port, ipaddress, function(){
+  console.log('Magic happens on port ' + port);
+});
