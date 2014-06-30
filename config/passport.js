@@ -1,10 +1,13 @@
 // config/passport.js
-var fs = require('fs');
-// load all the things we need
-var LocalStrategy   = require('passport-local').Strategy;
+var fs        = require('fs'),
+    NodeRSA   = require('node-rsa'),
+    key       = new NodeRSA({b: 512}),
+    pubkey    = key.$cache.publicPEM,
+    privakey  = key.$cache.privatePEM;
 
-// load up the user model
-var User          = require('../models/user');
+// load all the things we need
+var LocalStrategy  = require('passport-local').Strategy;
+var User           = require('../models/user');
 
 // expose this function to our app using module.exports
 module.exports = function(passport) {
@@ -64,6 +67,8 @@ module.exports = function(passport) {
         // set the user's local credentials
         newUser.local.email    = email;
         newUser.local.password = newUser.generateHash(password);
+        newUser.keys.public_key     = pubkey;
+        newUser.keys.private_key    = privakey;
 
         // save the user
         newUser.save(function(err, user) {
@@ -77,6 +82,8 @@ module.exports = function(passport) {
               return done(null, newUser);
             });
           });
+
+
         });
 
       }

@@ -1,8 +1,5 @@
 module.exports = function(app, express, passport, fs, multiparty, _){
-  var rsa          = require('rsa-stream'),
-      pubkey       = fs.readFileSync('./keys/minhaPubKey.pub', 'utf8'),
-      encStream    = rsa.encrypt(pubkey);
-
+  var rsa          = require('rsa-stream');      
   var router = express.Router();
 
   router.get('/', function(req, res) {
@@ -10,6 +7,8 @@ module.exports = function(app, express, passport, fs, multiparty, _){
   });
 
   router.post('/upload', function(req, res) {
+    var pubkey       = req.user.keys.public_key;
+    var encStream    = rsa.encrypt(pubkey);
     var form = new multiparty.Form({autoFiles: true, uploadDir: '../data/'+req.user._id+'/originals'});
     form.parse(req, function(err, fields, files) {
       if (err) throw err;
