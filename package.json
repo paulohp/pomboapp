@@ -1,35 +1,39 @@
 {
-  "name": "OpenShift-Sample-App",
-  "version": "1.0.0",
-  "description": "OpenShift Sample Application",
-  "keywords": [
-    "OpenShift",
-    "Node.js",
-    "application",
-    "openshift"
-  ],
-  "author": {
-    "name": "OpenShift",
-    "email": "ramr@example.org",
-    "url": "http://www.openshift.com/"
+  "name": "pomboapp",
+  "version": "0.0.1",
+  "description": "Cloud App Written in Node.JS",
+  "main": "app.js",
+  "scripts": {
+    "test": "test"
   },
-  "homepage": "http://www.openshift.com/",
   "repository": {
     "type": "git",
-    "url": "https://github.com/openshift/origin-server"
+    "url": "git://github.com/paulohp/pomboapp.git"
   },
-
-  "engines": {
-    "node": ">= 0.6.0",
-    "npm": ">= 1.0.0"
+  "author": "Paulo Pires",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/paulohp/pomboapp/issues"
   },
-
+  "homepage": "https://github.com/paulohp/pomboapp",
   "dependencies": {
-    "express": "~3.4.4"
-  },
-  "devDependencies": {},
-  "bundleDependencies": [],
-
-  "private": true,
-  "main": "server.js"
+    "body-parser": "^1.0.1",
+    "express": "^4.0.0",
+    "lodash": "*",
+    "jade": "*",
+    "multiparty": "^3.2.6",
+    "rsa-stream": "0.0.2",
+    "mongoose" : "~3.8.1",
+    "passport" : "~0.1.17",
+    "passport-local" : "~0.1.6",
+    "passport-facebook" : "~1.0.2",
+    "passport-twitter" : "~1.0.2",
+    "passport-google-oauth" : "~0.1.5",
+    "connect-flash" : "~0.1.1",
+    "bcrypt-nodejs" : "latest",
+    "morgan": "~1.0.0",
+    "body-parser": "~1.0.0",
+    "cookie-parser": "~1.0.0",
+    "express-session": "~1.0.0"
+  }
 }

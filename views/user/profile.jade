@@ -1,0 +1,30 @@
+extends ../layout
+
+block content
+  .container
+    .header
+      .logo
+        h1 Pombo
+          span.blue APP
+      ul.nav.nav-pills
+        -if(loggedIn)
+          li
+            a(href='/profile') Profile
+          li
+            a(href='/files') Files
+          li
+            a(href='/logout') Logout
+
+    .page-header
+      h1
+        span.fa.fa-anchor Profile Page
+    .row
+
+      .col-sm-6
+        .well
+          h3
+            span.fa.fa-user Local
+          p
+            strong id #{user._id}
+            br
+            strong  #{user.local.email}
