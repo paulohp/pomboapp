@@ -40,7 +40,7 @@ app.use(function (req, res, next) {
   next();
 });
 
-var port =  process.env.OPENSHIFT_NODEJS_PORT || 8080;
+var port =  process.env.OPENSHIFT_NODEJS_PORT || 8081;
 var ipaddress = process.env.OPENSHIFT_NODEJS_IP || '127.0.0.1';
 
 // routes ======================================================================
