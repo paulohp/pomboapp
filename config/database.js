@@ -1,7 +1,7 @@
 // config/database.js
 if (process.env.OPENSHIFT_MONGODB_DB_HOST) {
   module.exports = {
-    'url' : 'mongodb://admin:tbJ4WjhiFXug@' + process.env.OPENSHIFT_MONGODB_DB_HOST + ':' + process.env.OPENSHIFT_MONGODB_DB_PORT' + /pombo' 
+    'url' : 'mongodb://admin:tbJ4WjhiFXug@' + process.env.OPENSHIFT_MONGODB_DB_HOST + ':' + process.env.OPENSHIFT_MONGODB_DB_PORT + '/pombo' 
   };
 }else{
   module.exports = {
