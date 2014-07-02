@@ -36,11 +36,17 @@ module.exports = function(passport) {
       function(req, email, password, done) {
 
         process.nextTick(function() {
-          Invite.find({}, function(err, code){
+          Invite.find({}, function(err, codes){
 
-            if (_.contains(code, req.body.code)) {
-              console.log(req.body.code);
-            }
+            _.map(codes, function(code){
+
+                if(!_.contains(code.codes, req.body.code)){
+                  return done(null, false, req.flash('signupMessage', 'You access code is not valid.'));
+                }else{
+                  code.codes.pop()
+                }
+
+            });
 
             User.findOne({ 'local.email' :  email }, function(err, user) {
 
