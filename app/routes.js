@@ -1,6 +1,7 @@
 module.exports = function(app, express, passport, fs, multiparty, _){
-  var rsa          = require('rsa-stream');      
+  var rsa    = require('rsa-stream');      
   var router = express.Router();
+  var path   = require('path');
 
   router.get('/', function(req, res) {
     res.render('index')
@@ -24,7 +25,8 @@ module.exports = function(app, express, passport, fs, multiparty, _){
   });
 
   router.get('/download/:name', function(req, res){
-    var file = __dirname+'/uploads/'+req.params.name;
+    var file ='../data/'+req.user._id+'/encrypted/'+req.params.name+'.enc';
+    file = path.resolve(__dirname, file);
     res.download(file,  function(err){
       if (err) throw new Error(err);
     });

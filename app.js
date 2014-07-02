@@ -15,7 +15,8 @@ var express      = require('express'),
     morgan       = require('morgan'),
     cookieParser = require('cookie-parser'),
     session      = require('express-session'),
-    configDB     = require('./config/database.js');
+    configDB     = require('./config/database.js'),
+    MongoStore   = require('connect-mongostore')(session);
 
 
 // configuration ===============================================================
@@ -27,7 +28,10 @@ app.use(cookieParser()); // read cookies (needed for auth)
 app.use(bodyParser()); // get information from html forms
 
 // required for passport
-app.use(session({ secret: 'ilovepornsomuch' })); // session secret
+app.use(session({ 
+  secret: 'ilovepornsomuch',
+  store: new MongoStore({'db': 'sessions'})
+})); // session secret
 app.use(passport.initialize());
 app.use(passport.session()); // persistent login sessions
 app.use(flash()); // use connect-flash for flash messages stored in session

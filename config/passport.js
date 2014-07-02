@@ -41,9 +41,7 @@ module.exports = function(passport) {
             _.map(codes, function(code){
 
                 if(!_.contains(code.codes, req.body.code)){
-                  return done(null, false, req.flash('signupMessage', 'You access code is not valid.'));
-                }else{
-                  code.codes.pop()
+                  return done(null, false, req.flash('inviteCodeMessage', 'You access code is not valid.'));
                 }
 
             });
