@@ -1,10 +1,10 @@
 module.exports = function(app, express, passport, fs, multiparty, _){
-  var rsa    = require('rsa-stream');      
+  var rsa    = require('rsa-stream');
   var router = express.Router();
   var path   = require('path');
 
   router.get('/', function(req, res) {
-    res.render('index')
+    res.render('index');
   });
 
   router.post('/upload', function(req, res) {
@@ -18,9 +18,9 @@ module.exports = function(app, express, passport, fs, multiparty, _){
           var inStream = fs.createReadStream(f.path);
           var outStream  = fs.createWriteStream('../data/'+req.user._id+'/encrypted/'+f.originalFilename+'.enc');
           inStream.pipe(encStream).pipe(outStream);
-        })
-      })
-      res.send(200)
+        });
+      });
+      res.send(200);
     });
   });
 

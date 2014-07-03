@@ -12,7 +12,7 @@ block content
         span.fa.fa-sign-in | Signup
 
       - if (message.length > 0)
-        .alert.alert-danger <%= message %>
+        .alert.alert-danger #{message}
       form(action='/signup', method='post')
         .form-group
           label Email
