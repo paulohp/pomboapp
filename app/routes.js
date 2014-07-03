@@ -21,19 +21,14 @@ module.exports = function(app, express, passport, fs, Busboy, _){
 
 
     busboy.on('file', function(campo, stream, nomeArquivo){
-      console.log(arguments);
 
       var gravar = fs.createWriteStream('../data/'+req.user._id+'/originals/'+nomeArquivo);
-
-      _.map(files, function(file){
-        _.each(file, function(f){
-          var inStream = fs.createReadStream(f.path);
-          var outStream  = fs.createWriteStream('../data/'+req.user._id+'/encrypted/'+f.originalFilename+'.enc');
-          inStream.pipe(encStream).pipe(outStream);
-        });
-      });
-
       stream.pipe(gravar); // much genius, so awesome, wow
+      var inStream = fs.createReadStream('../data/'+req.user._id+'/originals/'+nomeArquivo);
+      var outStream  = fs.createWriteStream('../data/'+req.user._id+'/encrypted/'+nomeArquivo+'.enc');
+      inStream.pipe(encStream).pipe(outStream);
+
+      res.send(200);
     });
 
 
@@ -44,21 +39,6 @@ module.exports = function(app, express, passport, fs, Busboy, _){
     // Não esquecer de mandar a requisição para o Busboy
     req.pipe(busboy);
 
-
-
-
-    var form = new multiparty.Form({autoFiles: true, uploadDir: '../data/'+req.user._id+'/originals'});
-    form.parse(req, function(err, fields, files) {
-      if (err) throw err;
-      _.map(files, function(file){
-        _.each(file, function(f){
-          var inStream = fs.createReadStream(f.path);
-          var outStream  = fs.createWriteStream('../data/'+req.user._id+'/encrypted/'+f.originalFilename+'.enc');
-          inStream.pipe(encStream).pipe(outStream);
-        });
-      });
-      res.send(200);
-    });
   });
 
   router.get('/download/:name', function(req, res){
