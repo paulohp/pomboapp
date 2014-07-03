@@ -2,7 +2,7 @@
   "name": "pomboapp",
   "version": "0.0.1",
   "description": "Cloud App Written in Node.JS",
-  "main": "app.js",
+  "main": "server.js",
   "scripts": {
     "test": "test"
   },

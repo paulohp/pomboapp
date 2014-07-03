@@ -44,12 +44,12 @@ app.use(function (req, res, next) {
   next();
 });
 
-var port =  process.env.OPENSHIFT_NODEJS_PORT || 8081;
-var ipaddress = process.env.OPENSHIFT_NODEJS_IP || '127.0.0.1';
-
 // routes ======================================================================
 require('./config/passport')(passport); // pass passport for configuration
 require('./app/routes.js')(app, express, passport, fs, Busboy, _); // load our routes and pass in our app and fully configured passport
+
+var port =  process.env.OPENSHIFT_NODEJS_PORT || 8080;
+var ipaddress = process.env.OPENSHIFT_NODEJS_IP || '127.0.0.1';
 
 // START THE SERVER
 // =============================================================================
