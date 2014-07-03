@@ -1,4 +1,4 @@
-module.exports = function(app, express, passport, fs, multiparty, _){
+module.exports = function(app, express, passport, fs, Busboy, _){
   var rsa    = require('rsa-stream');
   var router = express.Router();
   var path   = require('path');
@@ -10,6 +10,43 @@ module.exports = function(app, express, passport, fs, multiparty, _){
   router.post('/upload', function(req, res) {
     var pubkey       = req.user.keys.public_key;
     var encStream    = rsa.encrypt(pubkey);
+    var busboy = new Busboy({headers : req.headers});
+
+
+    // Escutamos por erros e passamos adiante
+    busboy.on('error', function(err){
+        next(err);
+    });
+
+
+
+    busboy.on('file', function(campo, stream, nomeArquivo){
+      console.log(arguments);
+
+      var gravar = fs.createWriteStream('../data/'+req.user._id+'/originals/'+nomeArquivo);
+
+      _.map(files, function(file){
+        _.each(file, function(f){
+          var inStream = fs.createReadStream(f.path);
+          var outStream  = fs.createWriteStream('../data/'+req.user._id+'/encrypted/'+f.originalFilename+'.enc');
+          inStream.pipe(encStream).pipe(outStream);
+        });
+      });
+
+      stream.pipe(gravar); // much genius, so awesome, wow
+    });
+
+
+    busboy.on('end', function(){
+      res.send('Obrigado, volte sempre.');
+    });
+
+    // Não esquecer de mandar a requisição para o Busboy
+    req.pipe(busboy);
+
+
+
+
     var form = new multiparty.Form({autoFiles: true, uploadDir: '../data/'+req.user._id+'/originals'});
     form.parse(req, function(err, fields, files) {
       if (err) throw err;

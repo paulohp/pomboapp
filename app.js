@@ -7,7 +7,7 @@ var express      = require('express'),
     app          = express(),
     _            = require('lodash'),
     bodyParser   = require('body-parser'),
-    multiparty   = require('multiparty'),
+    Busboy       = require('busboy'),
     fs           = require('fs'),
     mongoose     = require('mongoose'),
     passport     = require('passport'),
@@ -28,7 +28,7 @@ app.use(cookieParser()); // read cookies (needed for auth)
 app.use(bodyParser()); // get information from html forms
 
 // required for passport
-app.use(session({ 
+app.use(session({
   secret: 'ilovepornsomuch',
   store: new MongoStore({'db': 'sessions'})
 })); // session secret
@@ -49,7 +49,7 @@ var ipaddress = process.env.OPENSHIFT_NODEJS_IP || '127.0.0.1';
 
 // routes ======================================================================
 require('./config/passport')(passport); // pass passport for configuration
-require('./app/routes.js')(app, express, passport, fs, multiparty, _); // load our routes and pass in our app and fully configured passport
+require('./app/routes.js')(app, express, passport, fs, Busboy, _); // load our routes and pass in our app and fully configured passport
 
 // START THE SERVER
 // =============================================================================
