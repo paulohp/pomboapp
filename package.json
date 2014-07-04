@@ -25,6 +25,8 @@
     "body-parser": "^1.0.0",
     "busboy": "^0.2.7",
     "connect-flash": "~0.1.1",
+    "connect-mongo": "^0.4.1",
+    "connect-mongoose-session-store": "0.0.8",
     "connect-mongostore": "^0.1.0",
     "connect-redis": "^2.0.0",
     "cookie-parser": "~1.0.0",

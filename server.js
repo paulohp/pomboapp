@@ -28,13 +28,9 @@ app.use(cookieParser()); // read cookies (needed for auth)
 app.use(bodyParser()); // get information from html forms
 
 // required for passport
-
 app.use(session({
   secret: 'ilovepornsomuch',
-  // store: new MongoStore({
-  //   'db': 'pomboapp',
-  //   'url' : configDB.url
-  // })
+  store: new MongoStore({ db: mongoose.connections[0].db })
 })); // session secret
 
 app.use(passport.initialize());
@@ -43,7 +39,7 @@ app.use(flash()); // use connect-flash for flash messages stored in session
 
 app.set('views', __dirname + '/views');
 app.set('view engine', 'jade');
-app.use(express.static(__dirname + '/public'))
+app.use(express.static(__dirname + '/public'));
 app.use(function (req, res, next) {
   res.locals.loggedIn = req.isAuthenticated();
   next();
