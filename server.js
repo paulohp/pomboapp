@@ -33,7 +33,7 @@ if (process.env.OPENSHIFT_MONGODB_DB_HOST) {
     secret: 'ilovepornsomuch',
     store: new MongoStore({
       'db': 'pomboapp',
-      'url' : 'mongodb://admin:tbJ4WjhiFXug@' + process.env.OPENSHIFT_MONGODB_DB_HOST + ':' + process.env.OPENSHIFT_MONGODB_DB_PORT + '/pomboapp'
+      'url' : 'mongodb://admin:tbJ4WjhiFXug@' + process.env.OPENSHIFT_MONGODB_DB_HOST + ':' + process.env.OPENSHIFT_MONGODB_DB_PORT
     })
   })); // session secret
 }else{
