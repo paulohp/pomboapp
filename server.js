@@ -31,10 +31,10 @@ app.use(bodyParser()); // get information from html forms
 
 app.use(session({
   secret: 'ilovepornsomuch',
-  store: new MongoStore({
-    'db': 'pomboapp',
-    'url' : configDB.url
-  })
+  // store: new MongoStore({
+  //   'db': 'pomboapp',
+  //   'url' : configDB.url
+  // })
 })); // session secret
 
 app.use(passport.initialize());
