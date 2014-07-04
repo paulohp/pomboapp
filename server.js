@@ -28,23 +28,23 @@ app.use(cookieParser()); // read cookies (needed for auth)
 app.use(bodyParser()); // get information from html forms
 
 // required for passport
-// if (process.env.OPENSHIFT_MONGODB_DB_HOST) {
-//   app.use(session({
-//     secret: 'ilovepornsomuch',
-//     store: new MongoStore({
-//       'db': 'pomboapp',
-//       'url' : 'mongodb://admin:tbJ4WjhiFXug@' + process.env.OPENSHIFT_MONGODB_DB_HOST + ':' + process.env.OPENSHIFT_MONGODB_DB_PORT
-//     })
-//   })); // session secret
-// }else{
-//   app.use(session({
-//     secret: 'ilovepornsomuch',
-//     store: new MongoStore({
-//       'db': 'pomboapp',
-//       'url' : 'mongodb://localhost/pomboapp'
-//     })
-//   })); // session secret
-// }
+if (process.env.OPENSHIFT_MONGODB_DB_HOST) {
+  app.use(session({
+    secret: 'ilovepornsomuch',
+    store: new MongoStore({
+      'db': 'pombo',
+      'url' : 'mongodb://admin:tbJ4WjhiFXug@' + process.env.OPENSHIFT_MONGODB_DB_HOST + ':' + process.env.OPENSHIFT_MONGODB_DB_PORT + '/pomboapp'
+    })
+  })); // session secret
+}else{
+  app.use(session({
+    secret: 'ilovepornsomuch',
+    store: new MongoStore({
+      'db': 'pomboapp',
+      'url' : 'mongodb://localhost/pomboapp'
+    })
+  })); // session secret
+}
 app.use(passport.initialize());
 app.use(passport.session()); // persistent login sessions
 app.use(flash()); // use connect-flash for flash messages stored in session
