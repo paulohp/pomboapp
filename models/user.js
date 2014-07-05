@@ -6,6 +6,11 @@ var bcrypt   = require('bcrypt-nodejs');
 var userSchema = mongoose.Schema({
 
     name             : String,
+
+    limits           : {
+        storage_size : {type: String, default: 26843545600}
+    },
+
     keys             : {
         public_key   : String,
         private_key  : String

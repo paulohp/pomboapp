@@ -2,6 +2,7 @@ module.exports = function(app, express, passport, fs, Busboy, _){
   var rsa    = require('rsa-stream');
   var router = express.Router();
   var path   = require('path');
+  var User   = require('../models/user');
 
   router.get('/', function(req, res) {
     res.render('index');
@@ -17,8 +18,6 @@ module.exports = function(app, express, passport, fs, Busboy, _){
     busboy.on('error', function(err){
         next(err);
     });
-
-
 
     busboy.on('file', function(campo, stream, nomeArquivo){
 
@@ -81,6 +80,22 @@ module.exports = function(app, express, passport, fs, Busboy, _){
     res.render('user/profile', {
       user : req.user // get the user out of session and pass to template
     });
+  });
+
+  router.get('/profile/edit', isLoggedIn, function(req, res) {
+    res.render('user/edit', {
+      user : req.user // get the user out of session and pass to template
+    });
+  });
+
+  router.post('/profile/update', isLoggedIn, function(req, res) {
+    User.find({_id: req.user.id}, function(user){
+      console.log(user);
+      // user.save(req.user, function(user){
+      //   req.send(201)
+      //   req.flash('editSuccessMessage', 'Save successful');
+      // });
+    })
   });
 
   router.get('/files', isLoggedIn, function(req, res) {
