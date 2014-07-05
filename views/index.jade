@@ -1,17 +1,85 @@
 extends layout
 
 block content
+
+  div.navbar.navbar-default.navbar-fixed-top
+    div.container
+      div.navbar-header
+        button.navbar-toggle(type='button', data-toggle='collapse', data-target='.navbar-collapse')
+          span.icon-bar
+          span.icon-bar
+          span.icon-bar
+        a.navbar-brand(href='#')
+          .header
+            .logo
+              h1.white Pombo
+                span.blue APP
+      div.navbar-collapse.collapse
+        ul.nav.navbar-nav.navbar-right
+          li
+            a(href='#') Already a member?
+
+  #headerwrap
+    .container
+      .row
+        .col-lg-6
+          h1
+            | All yours important files
+            br
+            | in one place, a secure place
+          form.form-inline(role='form')
+            .form-group
+              input#exampleInputEmail1.form-control(type='email', placeholder='Enter your email address')
+              button.btn.btn-warning(type='submit') Invite Me!
+        // /col-lg-6
+        .col-lg-6
+          img.img-responsive(src='/img/ipad-hand.png', alt='')
+
   .container
-    .header
-      .logo
-        h1 Pombo
-          span.blue APP
+    .row.mt.centered
+      .col-lg-6.col-lg-offset-3
+        h1
+          | Your Landing Page
+          br
+          | Looks Wonderful Now.
+        h3
+          | It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.
 
-    .col-md-6
-      img(src="/magician.svg", width="500px")
+    .row.mt.centered
+      .col-lg-4
+        img(src='/img/ser01.png', width='180', alt='')
+        h4 1 - Browser Compatibility
+        p
+          | Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever.
 
-    .col-md-6
-      a.btn.btn-primary.btn-lg(href="/signup") Sign up
-      br
-      span or
-        a.btn.btn-link.btn-lg(href="/login") Login
+      .col-lg-4
+        img(src='/img/ser02.png', width='180', alt='')
+        h4 2 - Email Campaigns
+        p
+          | Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever.
+
+      .col-lg-4
+        img(src='/img/ser03.png', width='180', alt='')
+        h4 3 - Gather Your Notes
+        p
+          | Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever.
+
+
+
+
+
+
+  //- .container
+  //-   .header
+  //-     .logo
+  //-       h1 Pombo
+  //-         span.blue APP
+
+  //-   .col-md-6
+  //-     img(src="/magician.svg", width="500px")
+
+  //-   .col-md-6
+  //-     a.btn.btn-primary.btn-lg(href="/signup") Sign up
+  //-     br
+  //-     span or
+  //-       a.btn.btn-link.btn-lg(href="/login") Login
