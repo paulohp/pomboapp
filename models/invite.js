@@ -1,10 +1,9 @@
-
 var mongoose = require('mongoose');
-var bcrypt   = require('bcrypt-nodejs');
 
 // define the schema for our user model
 var inviteSchema = mongoose.Schema({
-  codes : []
+  codes : [],
+  email : String
 });
 
 module.exports = mongoose.model('Invite', inviteSchema);

@@ -17,7 +17,7 @@ block content
       div.navbar-collapse.collapse
         ul.nav.navbar-nav.navbar-right
           li
-            a(href='#') Already a member?
+            a(href='/login') Already a member?
 
   #headerwrap
     .container
@@ -27,10 +27,10 @@ block content
             | All yours important files
             br
             | in one place, a secure place
-          form.form-inline(role='form')
+          .form-inline
             .form-group
-              input#exampleInputEmail1.form-control(type='email', placeholder='Enter your email address')
-              button.btn.btn-warning(type='submit') Invite Me!
+              input#emailInvite.form-control(type='email', placeholder='Enter your email address')
+              button.btn.btn-warning Invite Me!
         // /col-lg-6
         .col-lg-6
           img.img-responsive(src='/img/ipad-hand.png', alt='')

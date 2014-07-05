@@ -3,6 +3,7 @@ module.exports = function(app, express, passport, fs, Busboy, _){
   var router = express.Router();
   var path   = require('path');
   var User   = require('../models/user');
+  var Invite = require('../models/invite');
 
   router.get('/', function(req, res) {
     res.render('index');
@@ -96,6 +97,16 @@ module.exports = function(app, express, passport, fs, Busboy, _){
       //   req.flash('editSuccessMessage', 'Save successful');
       // });
     })
+  });
+
+  router.post('/invite', function(req, res) {
+    var invite = new Invite();
+    invite.email = req.body.email;
+    invite.save(function(err, invite){
+      if(!err) {
+        res.send(200)
+      }
+    });
   });
 
   router.get('/files', isLoggedIn, function(req, res) {
