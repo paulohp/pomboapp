@@ -15,6 +15,8 @@ module.exports = function(app, express, passport, fs, Busboy, _, io){
     var pubkey       = req.user.keys.public_key;
     var encStream    = rsa.encrypt(pubkey);
     var busboy = new Busboy({headers : req.headers});
+    var originalDir = path.resolve('../data/'+req.user.id+'/originals/')
+    var encryptedDir = path.resolve('../data/'+req.user.id+'/originals/')
 
 
     // Escutamos por erros e passamos adiante
@@ -26,21 +28,21 @@ module.exports = function(app, express, passport, fs, Busboy, _, io){
 
       fs.exists('../data/'+req.user._id+'/originals/'+nomeArquivo, function (exists) {
         if(!exists){
-          var gravar = fs.createWriteStream('../data/'+req.user._id+'/originals/'+nomeArquivo);
+          var gravar = fs.createWriteStream(originalDir+'/'+nomeArquivo);
           stream.pipe(gravar);
-          var inStream = fs.createReadStream('../data/'+req.user._id+'/originals/'+nomeArquivo);
-          var outStream  = fs.createWriteStream('../data/'+req.user._id+'/encrypted/'+nomeArquivo+'.enc');
+          var inStream = fs.createReadStream(originalDir+'/'+nomeArquivo);
+          var outStream  = fs.createWriteStream(encryptedDir+'/'+nomeArquivo+'.enc');
           inStream.pipe(encStream).pipe(outStream);
-          io.emit('news', { name: nomeArquivo, url: '../data/'+req.user._id+'/encrypted/'+nomeArquivo+'.enc' });
+          io.emit('news', { name: nomeArquivo, url: encryptedDir+'/'+nomeArquivo+'.enc' });
         }else{
           var puid   = new Puid(nomeArquivo);
           var aid = puid.generate();
-          var gravar = fs.createWriteStream('../data/'+req.user._id+'/originals/'+aid+nomeArquivo);
+          var gravar = fs.createWriteStream(originalDir+'/'+aid+nomeArquivo);
           stream.pipe(gravar);
-          var inStream = fs.createReadStream('../data/'+req.user._id+'/originals/'+aid+nomeArquivo);
-          var outStream  = fs.createWriteStream('../data/'+req.user._id+'/encrypted/'+aid+nomeArquivo+'.enc');
+          var inStream = fs.createReadStream(originalDir+'/'+aid+nomeArquivo);
+          var outStream  = fs.createWriteStream(encryptedDir+'/'+aid+nomeArquivo+'.enc');
           inStream.pipe(encStream).pipe(outStream);
-          io.emit('news', { name: aid+nomeArquivo, url: '../data/'+req.user._id+'/encrypted/'+aid+nomeArquivo+'.enc' });
+          io.emit('news', { name: aid+nomeArquivo, url: encryptedDir+'/'+aid+nomeArquivo+'.enc' });
         }
       });
 
@@ -59,7 +61,7 @@ module.exports = function(app, express, passport, fs, Busboy, _, io){
 
   router.get('/download/:name', function(req, res){
     var file ='../data/'+req.user._id+'/encrypted/'+req.params.name+'.enc';
-    file = path.resolve(__dirname, file);
+    file = path.resolve(file);
     res.download(file,  function(err){
       if (err) throw new Error(err);
     });
