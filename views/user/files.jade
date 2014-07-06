@@ -32,6 +32,7 @@ block content
           th Name
           th Kind
           th Username
+          th Action
       tbody
         each file in files
           tr
@@ -39,6 +40,8 @@ block content
             td= file
             td folder
             td @mdo
+            td
+              a(class='btn btn-danger', href='/download/'+file) Download
     //- ul.files
     //-   each file in files
     //-     li.file= file
