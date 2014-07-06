@@ -5,7 +5,10 @@
   font-family: 'Oleo Script', cursive;
   margin: 0px;
 }
-
+.header{
+  margin-bottom: 20px;
+  min-height: 80px;
+}
 .header .nav{
   float: right;
   margin-top: 21px;

@@ -38,49 +38,47 @@ module.exports = function(passport) {
         process.nextTick(function() {
           Invite.find({}, function(err, codes){
 
-            _.map(codes, function(code){
+            var code = _.map(codes, function(code){return code});
+            if(!_.contains(code.codes, req.body.code)){
+              return done(null, false, req.flash('signupMessage', 'You access code is not valid.'));
+            }else{
 
-                if(!_.contains(code.codes, req.body.code)){
-                  return done(null, false, req.flash('inviteCodeMessage', 'You access code is not valid.'));
-                }
+              User.findOne({ 'local.email' :  email }, function(err, user) {
 
-            });
+                if (err)
+                  return done(err);
 
-            User.findOne({ 'local.email' :  email }, function(err, user) {
+                if (user) {
+                  return done(null, false, req.flash('signupMessage', 'That email is already taken.'));
+                } else {
 
-              if (err)
-                return done(err);
+                  var newUser            = new User();
 
-              if (user) {
-                return done(null, false, req.flash('signupMessage', 'That email is already taken.'));
-              } else {
+                  // set the user's local credentials
+                  newUser.local.email    = email;
+                  newUser.local.password = newUser.generateHash(password);
+                  newUser.keys.public_key     = pubkey;
+                  newUser.keys.private_key    = privakey;
 
-                var newUser            = new User();
-
-                // set the user's local credentials
-                newUser.local.email    = email;
-                newUser.local.password = newUser.generateHash(password);
-                newUser.keys.public_key     = pubkey;
-                newUser.keys.private_key    = privakey;
-
-                // save the user
-                newUser.save(function(err, user) {
-                  if (err)
-                    throw err;
-                  fs.mkdir('../data/'+user._id, function(err){
-                    if (err) {throw err};
-                    fs.mkdirSync('../data/'+user._id+'/originals');
-                    fs.mkdir('../data/'+user._id+'/encrypted', function(err){
+                  // save the user
+                  newUser.save(function(err, user) {
+                    if (err)
+                      throw err;
+                    fs.mkdir('../data/'+user._id, function(err){
                       if (err) {throw err};
-                      return done(null, newUser);
+                      fs.mkdirSync('../data/'+user._id+'/originals');
+                      fs.mkdir('../data/'+user._id+'/encrypted', function(err){
+                        if (err) {throw err};
+                        return done(null, newUser);
+                      });
                     });
+
+
                   });
 
-
-                });
-
-              }
-            });
+                }
+              });
+            }
           });
         });
 

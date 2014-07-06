@@ -23,7 +23,7 @@ module.exports = function(app, express, passport, fs, Busboy, _){
     busboy.on('file', function(campo, stream, nomeArquivo){
 
       var gravar = fs.createWriteStream('../data/'+req.user._id+'/originals/'+nomeArquivo);
-      stream.pipe(gravar); // much genius, so awesome, wow
+      stream.pipe(gravar);
       var inStream = fs.createReadStream('../data/'+req.user._id+'/originals/'+nomeArquivo);
       var outStream  = fs.createWriteStream('../data/'+req.user._id+'/encrypted/'+nomeArquivo+'.enc');
       inStream.pipe(encStream).pipe(outStream);
@@ -81,22 +81,6 @@ module.exports = function(app, express, passport, fs, Busboy, _){
     res.render('user/profile', {
       user : req.user // get the user out of session and pass to template
     });
-  });
-
-  router.get('/profile/edit', isLoggedIn, function(req, res) {
-    res.render('user/edit', {
-      user : req.user // get the user out of session and pass to template
-    });
-  });
-
-  router.post('/profile/update', isLoggedIn, function(req, res) {
-    User.find({_id: req.user.id}, function(user){
-      console.log(user);
-      // user.save(req.user, function(user){
-      //   req.send(201)
-      //   req.flash('editSuccessMessage', 'Save successful');
-      // });
-    })
   });
 
   router.post('/invite', function(req, res) {
