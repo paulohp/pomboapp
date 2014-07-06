@@ -2,7 +2,6 @@ var mongoose = require('mongoose');
 
 // define the schema for our user model
 var inviteSchema = mongoose.Schema({
-  codes : [],
   email : String
 });
 

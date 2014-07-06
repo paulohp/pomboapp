@@ -9,7 +9,7 @@ var fs        = require('fs'),
 // load all the things we need
 var LocalStrategy  = require('passport-local').Strategy;
 var User           = require('../models/user');
-var Invite         = require('../models/invite');
+var Code           = require('../models/code');
 
 // expose this function to our app using module.exports
 module.exports = function(passport) {
@@ -36,10 +36,9 @@ module.exports = function(passport) {
       function(req, email, password, done) {
 
         process.nextTick(function() {
-          Invite.find({}, function(err, codes){
-
-            var code = _.map(codes, function(code){return code});
-            if(!_.contains(code.codes, req.body.code)){
+          Code.find({}, function(err, codes){
+            var code = _.map(codes, function(code){return code.codes});
+            if(!_.contains(_.flatten(code), req.body.code)){
               return done(null, false, req.flash('signupMessage', 'You access code is not valid.'));
             }else{
 
