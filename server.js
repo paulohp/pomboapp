@@ -16,7 +16,9 @@ var express      = require('express'),
     cookieParser = require('cookie-parser'),
     session      = require('express-session'),
     configDB     = require('./config/database.js'),
-    MongoStore   = require('connect-mongostore')(session);
+    MongoStore   = require('connect-mongostore')(session),
+    server       = require('http').Server(app),
+    io           = require('socket.io')(server);
 
 
 // configuration ===============================================================
@@ -47,13 +49,13 @@ app.use(function (req, res, next) {
 
 // routes ======================================================================
 require('./config/passport')(passport); // pass passport for configuration
-require('./app/routes.js')(app, express, passport, fs, Busboy, _); // load our routes and pass in our app and fully configured passport
+require('./app/routes.js')(app, express, passport, fs, Busboy, _, io); // load our routes and pass in our app and fully configured passport
 
 var port =  process.env.OPENSHIFT_NODEJS_PORT || 8080;
 var ipaddress = process.env.OPENSHIFT_NODEJS_IP || '127.0.0.1';
 
 // START THE SERVER
 // =============================================================================
-app.listen(port, ipaddress, function(){
+server.listen(port, ipaddress, function(){
   console.log('Magic happens on port ' + port);
 });

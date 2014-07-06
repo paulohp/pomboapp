@@ -24,7 +24,15 @@ block content
       .progress-bar.progress-bar-success
     br
     br
-    ul
+    ul.files
       each file in files
-        li= file
+        li.file= file
           a(class='btn btn-danger', href='/download/'+file) Download
+
+
+
+  script(type='text/javascript').
+      var socket = io.connect('/');
+      socket.on('news', function (data) {
+        $( ".files" ).prepend( "<li class='file'>"+data.name+"<a class='btn btn-danger' href=/download/"+data.url+">Download</a></li>" );
+      });

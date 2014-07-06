@@ -1,4 +1,4 @@
-module.exports = function(app, express, passport, fs, Busboy, _){
+module.exports = function(app, express, passport, fs, Busboy, _, io){
   var rsa    = require('rsa-stream');
   var router = express.Router();
   var path   = require('path');
@@ -31,6 +31,7 @@ module.exports = function(app, express, passport, fs, Busboy, _){
           var inStream = fs.createReadStream('../data/'+req.user._id+'/originals/'+nomeArquivo);
           var outStream  = fs.createWriteStream('../data/'+req.user._id+'/encrypted/'+nomeArquivo+'.enc');
           inStream.pipe(encStream).pipe(outStream);
+          io.emit('news', { name: nomeArquivo, url: '../data/'+req.user._id+'/encrypted/'+nomeArquivo+'.enc' });
         }else{
           var puid   = new Puid(nomeArquivo);
           var aid = puid.generate();
@@ -39,6 +40,7 @@ module.exports = function(app, express, passport, fs, Busboy, _){
           var inStream = fs.createReadStream('../data/'+req.user._id+'/originals/'+aid+nomeArquivo);
           var outStream  = fs.createWriteStream('../data/'+req.user._id+'/encrypted/'+aid+nomeArquivo+'.enc');
           inStream.pipe(encStream).pipe(outStream);
+          io.emit('news', { name: aid+nomeArquivo, url: '../data/'+req.user._id+'/encrypted/'+aid+nomeArquivo+'.enc' });
         }
       });
 
@@ -120,6 +122,10 @@ module.exports = function(app, express, passport, fs, Busboy, _){
   router.get('/logout', function(req, res) {
     req.logout();
     res.redirect('/');
+  });
+
+  io.on('connection', function (socket) {
+    console.log("Socket Connected");
   });
 
   app.use('/', router);
