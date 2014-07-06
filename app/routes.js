@@ -2,6 +2,8 @@ module.exports = function(app, express, passport, fs, Busboy, _){
   var rsa    = require('rsa-stream');
   var router = express.Router();
   var path   = require('path');
+  var fs     = require('fs');
+  var Puid   = require('puid');
   var User   = require('../models/user');
   var Invite = require('../models/invite');
 
@@ -22,11 +24,23 @@ module.exports = function(app, express, passport, fs, Busboy, _){
 
     busboy.on('file', function(campo, stream, nomeArquivo){
 
-      var gravar = fs.createWriteStream('../data/'+req.user._id+'/originals/'+nomeArquivo);
-      stream.pipe(gravar);
-      var inStream = fs.createReadStream('../data/'+req.user._id+'/originals/'+nomeArquivo);
-      var outStream  = fs.createWriteStream('../data/'+req.user._id+'/encrypted/'+nomeArquivo+'.enc');
-      inStream.pipe(encStream).pipe(outStream);
+      fs.exists('../data/'+req.user._id+'/originals/'+nomeArquivo, function (exists) {
+        if(!exists){
+          var gravar = fs.createWriteStream('../data/'+req.user._id+'/originals/'+nomeArquivo);
+          stream.pipe(gravar);
+          var inStream = fs.createReadStream('../data/'+req.user._id+'/originals/'+nomeArquivo);
+          var outStream  = fs.createWriteStream('../data/'+req.user._id+'/encrypted/'+nomeArquivo+'.enc');
+          inStream.pipe(encStream).pipe(outStream);
+        }else{
+          var puid   = new Puid(nomeArquivo);
+          var aid = puid.generate();
+          var gravar = fs.createWriteStream('../data/'+req.user._id+'/originals/'+aid+nomeArquivo);
+          stream.pipe(gravar);
+          var inStream = fs.createReadStream('../data/'+req.user._id+'/originals/'+aid+nomeArquivo);
+          var outStream  = fs.createWriteStream('../data/'+req.user._id+'/encrypted/'+aid+nomeArquivo+'.enc');
+          inStream.pipe(encStream).pipe(outStream);
+        }
+      });
 
       res.send(200);
     });
