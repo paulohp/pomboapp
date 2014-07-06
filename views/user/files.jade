@@ -41,7 +41,11 @@ block content
             td folder
             td @mdo
             td
-              a(class='btn btn-danger', href='/download/'+file) Download
+              a(class='btn btn-success btn', href='/download/'+file)
+                i.glyphicon.glyphicon-floppy-save.white
+
+              a(class='btn btn-danger btn', href='/download/'+file)
+                i.glyphicon.glyphicon-floppy-remove.white
     //- ul.files
     //-   each file in files
     //-     li.file= file
