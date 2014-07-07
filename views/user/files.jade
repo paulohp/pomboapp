@@ -56,5 +56,5 @@ block content
   script(type='text/javascript').
       var socket = io.connect('/');
       socket.on('news', function (data) {
-        $( ".files" ).prepend( "<li class='file'>"+data.name+"<a class='btn btn-danger' href=/download/"+data.url+">Download</a></li>" );
+        $( ".table tbody" ).prepend( "<tr><td>1</td><td>"+data.name+"</td><td>folder</td><td>@mdo</td><td><a class='btn btn-danger' href=/download/"+data.url+">Download</a></td></tr>" );
       });
