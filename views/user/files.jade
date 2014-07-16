@@ -36,20 +36,18 @@ block content
       tbody
         each file in files
           tr
-            td 1
-            td= file
-            td folder
+            td
+              i(class= file.type.split('/').shift())
+            td= file.file_name
+            td= file.type.split('/').shift()
             td @mdo
             td
-              a(class='btn btn-success btn', href='/download/'+file)
+              a(class='btn btn-success btn', href='/download/'+file.file_name)
                 i.glyphicon.glyphicon-floppy-save.white
 
               a(class='btn btn-danger btn', href='/download/'+file)
                 i.glyphicon.glyphicon-floppy-remove.white
-    //- ul.files
-    //-   each file in files
-    //-     li.file= file
-    //-       a(class='btn btn-danger', href='/download/'+file) Download
+
 
 
 

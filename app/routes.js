@@ -6,6 +6,7 @@ module.exports = function(app, express, passport, fs, Busboy, _, io){
   var Puid   = require('puid');
   var User   = require('../models/user');
   var Invite = require('../models/invite');
+  var File   = require('../models/file');
 
   router.get('/', function(req, res) {
     res.render('index');
@@ -14,8 +15,8 @@ module.exports = function(app, express, passport, fs, Busboy, _, io){
   router.post('/upload', function(req, res) {
     var pubkey       = req.user.keys.public_key;
     var encStream    = rsa.encrypt(pubkey);
-    var busboy = new Busboy({headers : req.headers});
-    var originalDir = path.resolve('../data/'+req.user.id+'/originals/')
+    var busboy       = new Busboy({headers : req.headers});
+    var originalDir  = path.resolve('../data/'+req.user.id+'/originals/')
     var encryptedDir = path.resolve('../data/'+req.user.id+'/encrypted/')
 
 
@@ -24,7 +25,7 @@ module.exports = function(app, express, passport, fs, Busboy, _, io){
         next(err);
     });
 
-    busboy.on('file', function(campo, stream, nomeArquivo){
+    busboy.on('file', function(campo, stream, nomeArquivo, encoding, mimetype){
 
       fs.exists('../data/'+req.user._id+'/originals/'+nomeArquivo, function (exists) {
         if(!exists){
@@ -34,6 +35,13 @@ module.exports = function(app, express, passport, fs, Busboy, _, io){
           var outStream  = fs.createWriteStream(encryptedDir+'/'+nomeArquivo+'.enc');
           inStream.pipe(encStream).pipe(outStream);
           io.emit('news', { name: nomeArquivo, url: encryptedDir+'/'+nomeArquivo+'.enc' });
+
+          file = new File({file_name: nomeArquivo, type: mimetype, user: req.user.id});
+          file.save(function(err, fl){
+            if (err) throw err;
+            return fl;
+          });
+
         }else{
           var puid   = new Puid(nomeArquivo);
           var aid = puid.generate();
@@ -112,12 +120,12 @@ module.exports = function(app, express, passport, fs, Busboy, _, io){
   });
 
   router.get('/files', isLoggedIn, function(req, res) {
-    fs.readdir('../data/'+req.user._id+'/originals', function(err, files){
+    File.find({user: req.user.id}, function(err, files){
       if (err) throw err;
       res.render('user/files', {
         files: files
       });
-    })
+    });
   });
 
 

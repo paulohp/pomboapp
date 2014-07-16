@@ -19,6 +19,33 @@
 .white{
   color: white;
 }
+.video{
+  opacity: 0.4;
+  display: block;
+  background-image: url("/img/video.png");
+  background-size: 24px;
+  background-repeat: no-repeat;
+  margin: 0;
+  height: 32px;
+}
+.application{
+  opacity: 0.4;
+  display: block;
+  background-image: url("/img/doc.png");
+  background-size: 24px;
+  background-repeat: no-repeat;
+  margin: 0;
+  height: 32px;
+}
+.image{
+  opacity: 0.4;
+  display: block;
+  background-image: url("/img/pic.png");
+  background-size: 24px;
+  background-repeat: no-repeat;
+  margin: 0;
+  height: 32px;
+}
 body {
 
   font-family: 'Lato', sans-serif;
