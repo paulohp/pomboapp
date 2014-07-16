@@ -16,7 +16,7 @@ module.exports = function(app, express, passport, fs, Busboy, _, io){
     var encStream    = rsa.encrypt(pubkey);
     var busboy = new Busboy({headers : req.headers});
     var originalDir = path.resolve('../data/'+req.user.id+'/originals/')
-    var encryptedDir = path.resolve('../data/'+req.user.id+'/originals/')
+    var encryptedDir = path.resolve('../data/'+req.user.id+'/encrypted/')
 
 
     // Escutamos por erros e passamos adiante
