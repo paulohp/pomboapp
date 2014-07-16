@@ -36,7 +36,7 @@ module.exports = function(app, express, passport, fs, Busboy, _, io){
           inStream.pipe(encStream).pipe(outStream);
           io.emit('news', { name: nomeArquivo, url: encryptedDir+'/'+nomeArquivo+'.enc' });
 
-          file = new File({file_name: nomeArquivo, type: mimetype, user: req.user.id});
+          var file = new File({file_name: nomeArquivo, type: mimetype, user: req.user.id});
           file.save(function(err, fl){
             if (err) throw err;
             return fl;
@@ -51,6 +51,12 @@ module.exports = function(app, express, passport, fs, Busboy, _, io){
           var outStream  = fs.createWriteStream(encryptedDir+'/'+aid+nomeArquivo+'.enc');
           inStream.pipe(encStream).pipe(outStream);
           io.emit('news', { name: aid+nomeArquivo, url: encryptedDir+'/'+aid+nomeArquivo+'.enc' });
+
+          var file = new File({file_name: aid+nomeArquivo, type: mimetype, user: req.user.id});
+          file.save(function(err, fl){
+            if (err) throw err;
+            return fl;
+          });
         }
       });
 
