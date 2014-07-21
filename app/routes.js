@@ -4,6 +4,8 @@ module.exports = function(app, express, passport, fs, Busboy, _, io){
   var path   = require('path');
   var fs     = require('fs');
   var Puid   = require('puid');
+  var secret = require('../config/secret');
+  var jwt    = require('jsonwebtoken');
   var User   = require('../models/user');
   var Invite = require('../models/invite');
   var File   = require('../models/file');
@@ -94,6 +96,34 @@ module.exports = function(app, express, passport, fs, Busboy, _, io){
     failureRedirect : '/login', // redirect back to the signup page if there is an error
     failureFlash : true // allow flash messages
   }));
+
+  router.post('/oauth',function(req, res) {
+    var email = req.body.email || '';
+    var password = req.body.password || '';
+
+    if (email == '' || password == '') {
+        return res.send(401);
+    }
+
+    User.findOne({'local.email': email}, function (err, user) {
+      if (err) {
+          console.log(err);
+          return res.send(401);
+      }
+
+      user.comparePassword(password, function(isMatch) {
+        if (!isMatch) {
+            console.log("Attempt failed to login with " + user.username);
+            return res.send(401);
+        }
+
+        var token = jwt.sign(user, secret.secretToken, { expiresInMinutes: 60 });
+
+        return res.json({token:token});
+      });
+
+    });
+});
 
   // show the signup form
   router.get('/signup', function(req, res) {
