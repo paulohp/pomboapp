@@ -31,7 +31,6 @@ block content
           th #
           th Name
           th Kind
-          th Username
           th Action
       tbody
         each file in files
@@ -40,7 +39,6 @@ block content
               i(class= file.type.split('/').shift())
             td= file.file_name
             td= file.type.split('/').shift()
-            td @mdo
             td
               a(class='btn btn-success btn', href='/download/'+file.file_name)
                 i.glyphicon.glyphicon-floppy-save.white
