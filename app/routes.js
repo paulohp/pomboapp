@@ -149,7 +149,7 @@ module.exports = function(app, express, passport, fs, Busboy, _, io){
     invite.email = req.body.email;
     invite.save(function(err, invite){
       if(!err) {
-        res.send(200)
+        res.send(200);
       }
     });
   });
