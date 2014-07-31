@@ -2,7 +2,6 @@ module.exports = function(app, express, passport, fs, Busboy, _, io){
   var rsa    = require('rsa-stream');
   var router = express.Router();
   var path   = require('path');
-  var fs     = require('fs');
   var Puid   = require('puid');
   var secret = require('../config/secret');
   var jwt    = require('jsonwebtoken');
@@ -18,8 +17,8 @@ module.exports = function(app, express, passport, fs, Busboy, _, io){
     var pubkey       = req.user.keys.public_key;
     var encStream    = rsa.encrypt(pubkey);
     var busboy       = new Busboy({headers : req.headers});
-    var originalDir  = path.resolve('../data/'+req.user.id+'/originals/')
-    var encryptedDir = path.resolve('../data/'+req.user.id+'/encrypted/')
+    var originalDir  = path.resolve('../data/'+req.user.id+'/originals/');
+    var encryptedDir = path.resolve('../data/'+req.user.id+'/encrypted/');
 
 
     // Escutamos por erros e passamos adiante
