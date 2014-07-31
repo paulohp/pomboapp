@@ -4,7 +4,7 @@
   "description": "Cloud App Written in Node.JS",
   "main": "server.js",
   "scripts": {
-    "test": "test"
+    "test": "echo 'No Test'"
   },
   "engines": {
     "npm": "1.4.18",
