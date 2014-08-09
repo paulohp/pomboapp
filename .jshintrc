@@ -9,7 +9,8 @@
     "DS": true,
     "$": true,
     "require": true,
-    "module": true
+    "module": true,
+    "node": true
   },
   "node" : false,
   "browser" : false,

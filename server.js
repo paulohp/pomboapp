@@ -27,12 +27,19 @@ mongoose.connect(configDB.url); // connect to our database
 // set up our express application
 app.use(morgan('dev')); // log every request to the console
 app.use(cookieParser()); // read cookies (needed for auth)
-app.use(bodyParser()); // get information from html forms
+app.use(bodyParser.urlencoded({
+  extended: true
+}));
+
+app.use(bodyParser.json());
 
 // required for passport
 app.use(session({
   secret: 'ilovepornsomuch',
-  store: new MongoStore({ db: mongoose.connections[0].db })
+  store: new MongoStore({ db: mongoose.connections[0].db }),
+  proxy: true,
+  resave: true,
+  saveUninitialized: true
 })); // session secret
 
 app.use(passport.initialize());
