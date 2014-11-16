@@ -7,8 +7,8 @@
     "test": "echo 'No Test'"
   },
   "engines": {
-    "npm": "1.4.18",
-    "node": "0.10.28"
+    "npm": "1.4.28",
+    "node": "0.10.33"
   },
   "repository": {
     "type": "git",
