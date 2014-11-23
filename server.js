@@ -60,10 +60,9 @@ require('./config/passport')(passport); // pass passport for configuration
 require('./app/routes.js')(app, express, passport, fs, Busboy, _, io); // load our routes and pass in our app and fully configured passport
 
 var port =  process.env.PORT || 8080;
-var ipaddress = process.env.OPENSHIFT_NODEJS_IP || '127.0.0.1';
 
 // START THE SERVER
 // =============================================================================
-server.listen(port, ipaddress, function(){
+server.listen(port, function(){
   console.log('Magic happens on port ' + port);
 });
