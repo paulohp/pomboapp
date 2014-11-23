@@ -10,22 +10,27 @@ var fs        = require('fs'),
 var LocalStrategy  = require('passport-local').Strategy;
 var User           = require('../models/user');
 var Code           = require('../models/code');
+var gcloud         = require('gcloud');
+var storage;
+
+// From Google Compute Engine:
+storage = gcloud.storage({
+  projectId: 'main-aspect-584'
+});
 
 // expose this function to our app using module.exports
 module.exports = function(passport) {
+  // used to serialize the user for the session
+  passport.serializeUser(function(user, done) {
+    done(null, user.id);
+  });
 
-
-    // used to serialize the user for the session
-    passport.serializeUser(function(user, done) {
-      done(null, user.id);
+  // used to deserialize the user
+  passport.deserializeUser(function(id, done) {
+    User.findById(id, function(err, user) {
+      done(err, user);
     });
-
-    // used to deserialize the user
-    passport.deserializeUser(function(id, done) {
-      User.findById(id, function(err, user) {
-        done(err, user);
-      });
-    });
+  });
 
 
   passport.use('local-signup', new LocalStrategy({
@@ -63,13 +68,20 @@ module.exports = function(passport) {
                   newUser.save(function(err, user) {
                     if (err)
                       throw err;
-                    fs.mkdir('../data/'+user._id, function(err){
+                    // fs.mkdir('../data/'+user._id, function(err){
+                    //   if (err) {throw err};
+                    //   fs.mkdirSync('../data/'+user._id+'/originals');
+                    //   fs.mkdir('../data/'+user._id+'/encrypted', function(err){
+                    //     if (err) {throw err};
+                    //     return done(null, newUser);
+                    //   });
+                    // });
+                    storage.createBucket(user.local.email, function(err, bucket) {
                       if (err) {throw err};
-                      fs.mkdirSync('../data/'+user._id+'/originals');
-                      fs.mkdir('../data/'+user._id+'/encrypted', function(err){
-                        if (err) {throw err};
-                        return done(null, newUser);
-                      });
+                      if (bucket) {
+                        user.bucket = bucket.id;
+                        return done(null, user);
+                      };
                     });
 
 

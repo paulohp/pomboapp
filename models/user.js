@@ -16,6 +16,8 @@ var userSchema = mongoose.Schema({
         private_key  : String
     },
 
+    bucket: String,
+
     local            : {
         email        : String,
         password     : String,

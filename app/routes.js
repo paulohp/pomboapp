@@ -8,6 +8,13 @@ module.exports = function(app, express, passport, fs, Busboy, _, io){
   var User   = require('../models/user');
   var Invite = require('../models/invite');
   var File   = require('../models/file');
+  var gcloud = require('gcloud');
+  var storage;
+
+  // From Google Compute Engine:
+  storage = gcloud.storage({
+    projectId: 'main-aspect-584'
+  });
 
   router.get('/', function(req, res) {
     res.render('index');
@@ -28,37 +35,17 @@ module.exports = function(app, express, passport, fs, Busboy, _, io){
 
     busboy.on('file', function(campo, stream, nomeArquivo, encoding, mimetype){
 
-      fs.exists('../data/'+req.user._id+'/originals/'+nomeArquivo, function (exists) {
-        if(!exists){
-          var gravar = fs.createWriteStream(originalDir+'/'+nomeArquivo);
-          stream.pipe(gravar);
-          var inStream = fs.createReadStream(originalDir+'/'+nomeArquivo);
-          var outStream  = fs.createWriteStream(encryptedDir+'/'+nomeArquivo+'.enc');
-          inStream.pipe(encStream).pipe(outStream);
-          io.emit('news', { name: nomeArquivo, url: encryptedDir+'/'+nomeArquivo+'.enc' });
+      var gravar = fs.createWriteStream(originalDir+'/'+nomeArquivo);
+      stream.pipe(gravar);
+      var inStream = fs.createReadStream(originalDir+'/'+nomeArquivo);
+      var outStream  = fs.createWriteStream(encryptedDir+'/'+nomeArquivo+'.enc');
+      inStream.pipe(encStream).pipe(outStream);
+      io.emit('news', { name: nomeArquivo, url: encryptedDir+'/'+nomeArquivo+'.enc' });
 
-          var file = new File({file_name: nomeArquivo, type: mimetype, user: req.user.id});
-          file.save(function(err, fl){
-            if (err) throw err;
-            return fl;
-          });
-
-        }else{
-          var puid   = new Puid(nomeArquivo);
-          var aid = puid.generate();
-          var gravar = fs.createWriteStream(originalDir+'/'+aid+nomeArquivo);
-          stream.pipe(gravar);
-          var inStream = fs.createReadStream(originalDir+'/'+aid+nomeArquivo);
-          var outStream  = fs.createWriteStream(encryptedDir+'/'+aid+nomeArquivo+'.enc');
-          inStream.pipe(encStream).pipe(outStream);
-          io.emit('news', { name: aid+nomeArquivo, url: encryptedDir+'/'+aid+nomeArquivo+'.enc' });
-
-          var file = new File({file_name: aid+nomeArquivo, type: mimetype, user: req.user.id});
-          file.save(function(err, fl){
-            if (err) throw err;
-            return fl;
-          });
-        }
+      var file = new File({file_name: nomeArquivo, type: mimetype, user: req.user.id});
+      file.save(function(err, fl){
+        if (err) throw err;
+        return fl;
       });
 
       res.send(200);
