@@ -2,8 +2,8 @@
 if (process.env.MONGODB_HOST) {
   module.exports = {
     'url' : process.env.MONGO_URL,
-    'user': MONGODB_USERNAME,
-    'pass': MONGODB_PASSWORD
+    'user': process.env.MONGODB_USERNAME,
+    'pass': process.env.MONGODB_PASSWORD
   };
 }else{
   module.exports = {
