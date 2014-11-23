@@ -35,7 +35,7 @@ app.use(bodyParser.json());
 
 // required for passport
 app.use(session({
-  secret: 'ilovepornsomuch',
+  secret: 'ilovecodesomuch',
   store: new MongoStore({ db: mongoose.connections[0].db }),
   proxy: true,
   resave: true,
