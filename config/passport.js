@@ -1,5 +1,6 @@
 // config/passport.js
 var fs        = require('fs'),
+    path      = require('path'),
     _         = require('lodash'),
     NodeRSA   = require('node-rsa'),
     key       = new NodeRSA({b: 512}),
@@ -14,8 +15,10 @@ var gcloud         = require('gcloud');
 var storage;
 
 // From Google Compute Engine:
+
 storage = gcloud.storage({
-  projectId: 'main-aspect-584'
+  projectId: 'main-aspect-584',
+  keyFilename: path.resolve('./', 'key.json')
 });
 
 // expose this function to our app using module.exports
@@ -66,22 +69,12 @@ module.exports = function(passport) {
 
                   // save the user
                   newUser.save(function(err, user) {
-                    if (err)
+                    if (err){
                       throw err;
-                    // fs.mkdir('../data/'+user._id, function(err){
-                    //   if (err) {throw err};
-                    //   fs.mkdirSync('../data/'+user._id+'/originals');
-                    //   fs.mkdir('../data/'+user._id+'/encrypted', function(err){
-                    //     if (err) {throw err};
-                    //     return done(null, newUser);
-                    //   });
-                    // });
-                    storage.createBucket(user.local.email, function(err, bucket) {
+                    }
+                    storage.createBucket(user.id, function(err, bucket) {
                       if (err) {throw err};
-                      if (bucket) {
-                        user.bucket = bucket.id;
-                        return done(null, user);
-                      };
+                      return done(null, user);
                     });
 
 
@@ -94,22 +87,13 @@ module.exports = function(passport) {
         });
 
 }));
-// =========================================================================
-    // LOCAL LOGIN =============================================================
-    // =========================================================================
-  // we are using named strategies since we have one for login and one for signup
-  // by default, if there was no name, it would just be called 'local'
-
   passport.use('local-login', new LocalStrategy({
-        // by default, local strategy uses username and password, we will override with email
+
         usernameField : 'email',
         passwordField : 'password',
-        passReqToCallback : true // allows us to pass back the entire request to the callback
+        passReqToCallback : true
       },
-    function(req, email, password, done) { // callback with email and password from our form
-
-    // find a user whose email is the same as the forms email
-    // we are checking to see if the user trying to login already exists
+    function(req, email, password, done) {
     User.findOne({ 'local.email' :  email }, function(err, user) {
       // if there are any errors, return the error before anything else
       if (err)
