@@ -11,10 +11,11 @@ module.exports = function(app, express, passport, fs, Busboy, _, io){
   var gcloud = require('gcloud');
   var storage;
 
-  // From Google Compute Engine:
-  storage = gcloud.storage({
-    projectId: 'main-aspect-584'
-  });
+// From Google Compute Engine:
+storage = gcloud.storage({
+  projectId: 'main-aspect-584',
+  keyFilename: path.resolve('./', 'key.json')
+});
 
   router.get('/', function(req, res) {
     res.render('index');
