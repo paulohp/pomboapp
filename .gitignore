@@ -13,3 +13,4 @@ Thumbs.db
 npm-debug.log
 
 /keys/*
+/tmp/*
