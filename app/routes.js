@@ -25,8 +25,11 @@ storage = gcloud.storage({
     var pubkey       = req.user.keys.public_key;
     var encStream    = rsa.encrypt(pubkey);
     var busboy       = new Busboy({headers : req.headers});
-    var originalDir  = path.resolve('../data/'+req.user.id+'/originals/');
-    var encryptedDir = path.resolve('../data/'+req.user.id+'/encrypted/');
+    var originalDir  = path.resolve('./tmp/');
+
+    var bucket = storage.bucket(req.user.id);
+
+    console.log(bucket);
 
 
     // Escutamos por erros e passamos adiante
@@ -39,9 +42,12 @@ storage = gcloud.storage({
       var gravar = fs.createWriteStream(originalDir+'/'+nomeArquivo);
       stream.pipe(gravar);
       var inStream = fs.createReadStream(originalDir+'/'+nomeArquivo);
-      var outStream  = fs.createWriteStream(encryptedDir+'/'+nomeArquivo+'.enc');
-      inStream.pipe(encStream).pipe(outStream);
-      io.emit('news', { name: nomeArquivo, url: encryptedDir+'/'+nomeArquivo+'.enc' });
+
+
+      inStream.pipe(encStream).pipe(bucket.file(nomeArquivo).createWriteStream());
+
+
+      //io.emit('news', { name: nomeArquivo, url: encryptedDir+'/'+nomeArquivo+'.enc' });
 
       var file = new File({file_name: nomeArquivo, type: mimetype, user: req.user.id});
       file.save(function(err, fl){
