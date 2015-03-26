@@ -1,1 +1,1 @@
-https://codeship.io/projects/d6b9d760-6992-0131-5777-3ade9668166e/status
+[![Dependencies Status](http://img.shields.io/david/paulohp/pomboapp.svg?style=flat)](https://david-dm.org/paulohp/pomboapp)
