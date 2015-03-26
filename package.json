@@ -7,8 +7,7 @@
     "test": "echo 'No Test'"
   },
   "engines": {
-    "npm": "1.4.28",
-    "node": "0.10.33"
+    "node": "0.12.x"
   },
   "repository": {
     "type": "git",
@@ -28,24 +27,24 @@
     "connect-flash": "~0.1.1",
     "connect-mongostore": "^0.1.2",
     "cookie-parser": "~1.3.2",
-    "express": "^4.1.2",
-    "express-jwt": "^0.3.1",
-    "express-session": "~1.7.2",
-    "gcloud": "^0.10.0",
-    "jade": "~1.5.0",
-    "jsonwebtoken": "^0.4.1",
-    "lodash": "^2.4.1",
-    "mongoose": "~3.8.14",
-    "mongoose-bluebird-utils": "0.0.9",
-    "morgan": "~1.2.2",
-    "node-rsa": "~0.1.53",
-    "passport": "~0.2.0",
-    "passport-facebook": "~1.0.2",
-    "passport-google-oauth": "~0.1.5",
+    "express": "^4.12.3",
+    "express-jwt": "^2.1.0",
+    "express-session": "^1.10.4",
+    "gcloud": "^0.12.0",
+    "jade": "~1.9.2",
+    "jsonwebtoken": "^4.2.1",
+    "lodash": "^3.6.0",
+    "mongoose": "^4.0.0",
+    "mongoose-bluebird-utils": "0.0.11",
+    "morgan": "^1.5.2",
+    "node-rsa": "^0.2.23",
+    "passport": "^0.2.1",
+    "passport-facebook": "^2.0.0",
+    "passport-google-oauth": "^0.1.5",
     "passport-local": "~1.0.0",
-    "passport-twitter": "~1.0.2",
-    "puid": "^0.5.4",
-    "rsa-stream": "0.0.2",
-    "socket.io": "^1.0.6"
+    "passport-twitter": "^1.0.3",
+    "puid": "^1.0.4",
+    "rsa-stream": "1.0.3",
+    "socket.io": "^1.3.5"
   }
 }
