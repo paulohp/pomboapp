@@ -1,5 +1,4 @@
 module.exports = function(app, express, passport, fs, Busboy, _, io){
-  var rsa    = require('rsa-stream');
   var router = express.Router();
   var path   = require('path');
   var Puid   = require('puid');
@@ -22,8 +21,6 @@ storage = gcloud.storage({
   });
 
   router.post('/upload', function(req, res) {
-    var pubkey       = req.user.keys.public_key;
-    var encStream    = rsa.encrypt(pubkey);
     var busboy       = new Busboy({headers : req.headers});
     var originalDir  = path.resolve('./tmp/');
 
@@ -44,7 +41,7 @@ storage = gcloud.storage({
       var inStream = fs.createReadStream(originalDir+'/'+nomeArquivo);
 
 
-      inStream.pipe(encStream).pipe(bucket.file(nomeArquivo).createWriteStream());
+      inStream.pipe(bucket.file(nomeArquivo).createWriteStream());
 
 
       //io.emit('news', { name: nomeArquivo, url: encryptedDir+'/'+nomeArquivo+'.enc' });
