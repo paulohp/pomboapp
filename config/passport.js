@@ -3,9 +3,9 @@ var fs        = require('fs'),
     path      = require('path'),
     _         = require('lodash'),
     NodeRSA   = require('node-rsa'),
-    key       = new NodeRSA({b: 512}),
-    pubkey    = key.$cache.publicPEM,
-    privakey  = key.$cache.privatePEM;
+    key       = new NodeRSA({b: 1024}),
+    pubkey    = key.exportKey('public'),
+    privakey  = key.exportKey('private');
 
 // load all the things we need
 var LocalStrategy  = require('passport-local').Strategy;
@@ -44,49 +44,45 @@ module.exports = function(passport) {
       function(req, email, password, done) {
 
         process.nextTick(function() {
-          Code.find({}, function(err, codes){
-            var code = _.map(codes, function(code){return code.codes});
-            if(!_.contains(_.flatten(code), req.body.code)){
-              return done(null, false, req.flash('signupMessage', 'You access code is not valid.'));
-            }else{
+          
+          User.findOne({ 'local.email' :  email }, function(err, user) {
 
-              User.findOne({ 'local.email' :  email }, function(err, user) {
+            if (err)
+              return done(err);
 
-                if (err)
-                  return done(err);
+            if (user) {
+              return done(null, false, req.flash('signupMessage', 'That email is already taken.'));
+            } else {
 
-                if (user) {
-                  return done(null, false, req.flash('signupMessage', 'That email is already taken.'));
-                } else {
+              var newUser            = new User();
 
-                  var newUser            = new User();
+              console.log(pubkey, privakey);
 
-                  // set the user's local credentials
-                  newUser.local.email    = email;
-                  newUser.local.password = newUser.generateHash(password);
-                  newUser.keys.public_key     = pubkey;
-                  newUser.keys.private_key    = privakey;
+              // set the user's local credentials
+              newUser.local.email    = email;
+              newUser.local.password = newUser.generateHash(password);
+              newUser.keys.public_key     = pubkey;
+              newUser.keys.private_key    = privakey;
 
-                  // save the user
-                  newUser.save(function(err, user) {
-                    if (err){
-                      throw err;
-                    }
-                    storage.createBucket(user.id, function(err, bucket) {
-                      if (err) {throw err};
-                      return done(null, user);
-                    });
-
-
-                  });
-
+              // save the user
+              newUser.save(function(err, user) {
+                if (err){
+                  throw err;
                 }
+                storage.createBucket(user.id, function(err, bucket) {
+                  console.log(err);
+                  if (err) {throw err};
+                  return done(null, user);
+                });
+
+
               });
+
             }
           });
         });
 
-}));
+      }));
   passport.use('local-login', new LocalStrategy({
 
         usernameField : 'email',
