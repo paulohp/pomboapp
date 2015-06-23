@@ -5,14 +5,11 @@ var Promise   = require('bluebird');
 var mbUtils   = require('mongoose-bluebird-utils');
 var _         = require('lodash');
 
-// define the schema for our user model
 var fileSchema = mongoose.Schema({
-
-    file_name             : String,
-    size                  : Number,
-    type                  : String,
-    user                  :   { type: ObjectId, ref: 'User'},
-
+  file_name             : String,
+  size                  : Number,
+  type                  : String,
+  user                  :   { type: ObjectId, ref: 'User'}
 });
 
 fileSchema.statics.getUsedStorage = function(user) {
