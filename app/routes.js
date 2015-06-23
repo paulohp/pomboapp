@@ -10,11 +10,11 @@ module.exports = function(app, express, passport, fs, Busboy, _, io){
   var gcloud = require('gcloud');
   var storage;
 
-// From Google Compute Engine:
-storage = gcloud.storage({
-  projectId: 'main-aspect-584',
-  keyFilename: path.resolve('./', 'key.json')
-});
+  // From Google Compute Engine:
+  storage = gcloud.storage({
+    projectId: 'main-aspect-584',
+    keyFilename: path.resolve('./', 'key.json')
+  });
 
   router.get('/', function(req, res) {
     res.render('index');
@@ -40,7 +40,7 @@ storage = gcloud.storage({
 
       inStream.pipe(bucket.file(nomeArquivo).createWriteStream());
 
-      //io.emit('news', { name: nomeArquivo, url: encryptedDir+'/'+nomeArquivo+'.enc' });
+      io.emit('news', { name: nomeArquivo, url: encryptedDir+'/'+nomeArquivo+'.enc' });
 
       var file = new File({file_name: nomeArquivo, type: mimetype, user: req.user.id});
       file.save(function(err, fl){
@@ -62,11 +62,12 @@ storage = gcloud.storage({
   });
 
   router.get('/download/:name', function(req, res){
-    var file ='../data/'+req.user._id+'/encrypted/'+req.params.name+'.enc';
-    file = path.resolve(file);
-    res.download(file,  function(err){
-      if (err) throw new Error(err);
-    });
+    storage.bucket(req.user._id).file(req.params.name).createReadStream().pipe(res);
+    // fileStream.pipe(fs.createWriteStream('/local/photo.jpg'));
+    
+    // res.download(file,  function(err){
+    //   if (err) throw new Error(err);
+    // });
   });
 
   // show the login form
@@ -109,7 +110,7 @@ storage = gcloud.storage({
       });
 
     });
-});
+  });
 
   // show the signup form
   router.get('/signup', function(req, res) {
@@ -150,7 +151,6 @@ storage = gcloud.storage({
     });
   });
 
-
   router.get('/logout', function(req, res) {
     req.logout();
     res.redirect('/');
@@ -165,9 +165,8 @@ storage = gcloud.storage({
 
 
 function isLoggedIn(req, res, next) {
-
-  if (req.isAuthenticated())
+  if (req.isAuthenticated()){
     return next();
-
+  }
   res.redirect('/');
 }
