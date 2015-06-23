@@ -10,7 +10,6 @@ var fs        = require('fs'),
 // load all the things we need
 var LocalStrategy  = require('passport-local').Strategy;
 var User           = require('../models/user');
-var Code           = require('../models/code');
 var gcloud         = require('gcloud');
 var storage;
 

@@ -15,29 +15,27 @@ var express      = require('express'),
     server       = require('http').Server(app),
     io           = require('socket.io')(server);
 
-mongoose.connect(configDB.url); // connect to our database
-
-app.use(morgan('dev')); // log every request to the console
-app.use(cookieParser()); // read cookies (needed for auth)
+mongoose.connect(configDB.url);
+app.use(morgan('dev'));
+app.use(cookieParser());
 app.use(bodyParser.urlencoded({
   extended: true
 }));
 
 app.use(bodyParser.json());
 
-// required for passport
 app.use(session({
   secret: 'ilovecodesomuch',
   store: new MongoStore({ db: mongoose.connections[0].db }),
   proxy: true,
   resave: true,
   saveUninitialized: true
-})); // session secret
+}));
 
 
 app.use(passport.initialize());
-app.use(passport.session()); // persistent login sessions
-app.use(flash()); // use connect-flash for flash messages stored in session
+app.use(passport.session());
+app.use(flash());
 
 app.set('views', __dirname + '/views');
 app.set('view engine', 'jade');
@@ -47,8 +45,8 @@ app.use(function (req, res, next) {
   next();
 });
 
-require('./config/passport')(passport); // pass passport for configuration
-require('./app/routes.js')(app, express, passport, fs, Busboy, _, io); // load our routes and pass in our app and fully configured passport
+require('./config/passport')(passport);
+require('./app/routes.js')(app, express, passport, fs, Busboy, _, io);
 
 var port =  process.env.PORT || 8080;
 server.listen(port, function(){

@@ -2,7 +2,6 @@ module.exports = function(app, express, passport, fs, Busboy, _, io){
   var router = express.Router();
   var path   = require('path');
   var Puid   = require('puid');
-  var secret = require('../config/secret');
   var jwt    = require('jsonwebtoken');
   var User   = require('../models/user');
   var File   = require('../models/file');
