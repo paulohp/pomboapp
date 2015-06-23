@@ -37,7 +37,6 @@ module.exports = function(app, express, passport, fs, Busboy, _, io){
       stream.pipe(gravar);
       var inStream = fs.createReadStream(originalDir+'/'+nomeArquivo);
 
-
       inStream.pipe(bucket.file(nomeArquivo).createWriteStream());
 
       var file = new File({file_name: nomeArquivo, type: mimetype, user: req.user.id});

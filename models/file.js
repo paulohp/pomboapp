@@ -15,7 +15,7 @@ var fileSchema = mongoose.Schema({
 
 });
 
-fileSchema.methods.getUsedStorage = function(user) {
+fileSchema.statics.getUsedStorage = function(user) {
   var aggregation = mongoose.model('File')
     .aggregate({$match: {user: user._id}},
                {$group: {_id: {}, total_storage: {$sum: '$size'}}});
