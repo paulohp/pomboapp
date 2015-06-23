@@ -26,9 +26,6 @@ storage = gcloud.storage({
 
     var bucket = storage.bucket(req.user.id);
 
-    console.log(bucket);
-
-
     // Escutamos por erros e passamos adiante
     busboy.on('error', function(err){
         next(err);
@@ -42,7 +39,6 @@ storage = gcloud.storage({
 
 
       inStream.pipe(bucket.file(nomeArquivo).createWriteStream());
-
 
       //io.emit('news', { name: nomeArquivo, url: encryptedDir+'/'+nomeArquivo+'.enc' });
 
