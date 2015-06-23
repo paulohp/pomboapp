@@ -1,8 +1,3 @@
-// app.js
-
-// BASE SETUP
-// =============================================================================
-
 var express      = require('express'),
     app          = express(),
     _            = require('lodash'),
@@ -20,11 +15,8 @@ var express      = require('express'),
     server       = require('http').Server(app),
     io           = require('socket.io')(server);
 
-
-// configuration ===============================================================
 mongoose.connect(configDB.url); // connect to our database
 
-// set up our express application
 app.use(morgan('dev')); // log every request to the console
 app.use(cookieParser()); // read cookies (needed for auth)
 app.use(bodyParser.urlencoded({
@@ -55,14 +47,10 @@ app.use(function (req, res, next) {
   next();
 });
 
-// routes ======================================================================
 require('./config/passport')(passport); // pass passport for configuration
 require('./app/routes.js')(app, express, passport, fs, Busboy, _, io); // load our routes and pass in our app and fully configured passport
 
 var port =  process.env.PORT || 8080;
-
-// START THE SERVER
-// =============================================================================
 server.listen(port, function(){
   console.log('Magic happens on port ' + port);
 });

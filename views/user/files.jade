@@ -45,14 +45,14 @@ block content
               a(class='btn btn-success btn', href='/download/'+file.file_name)
                 i.glyphicon.glyphicon-floppy-save.white
 
-              a(class='btn btn-danger btn', href='/download/'+file)
+              a(class='btn btn-danger btn', href='/delete/'+file.file_name)
                 i.glyphicon.glyphicon-floppy-remove.white
 
 
 
 
   script(type='text/javascript').
-      var socket = io.connect('/');
+      var socket = io.connect();
       socket.on('news', function (data) {
-        $( ".table tbody" ).prepend( "<tr><td>1</td><td>"+data.name+"</td><td>folder</td><td>@mdo</td><td><a class='btn btn-danger' href=/download/"+data.url+">Download</a></td></tr>" );
+        $( ".table tbody" ).prepend( "<tr><td><i class="+data.type+"></td><td>"+data.file_name+"</td><td>"+ data.type +"</td><td><a class='btn btn-success' href=/download/"+data.url+"><i class='glyphicon glyphicon-floppy-save white'></i></a><a class='btn btn-danger' href=/delete/"+data.url+"><i class='glyphicon glyphicon-floppy-remove white'></i></a></td></tr>" );
       });

@@ -40,20 +40,17 @@ module.exports = function(app, express, passport, fs, Busboy, _, io){
 
       inStream.pipe(bucket.file(nomeArquivo).createWriteStream());
 
-      io.emit('news', { name: nomeArquivo, url: encryptedDir+'/'+nomeArquivo+'.enc' });
-
       var file = new File({file_name: nomeArquivo, type: mimetype, user: req.user.id});
+      io.emit('news', file);
       file.save(function(err, fl){
         if (err) throw err;
         return fl;
       });
-
-      res.send(200);
     });
 
 
     busboy.on('end', function(){
-      res.send('Obrigado, volte sempre.');
+      res.send(200);
     });
 
     // Não esquecer de mandar a requisição para o Busboy
@@ -63,11 +60,15 @@ module.exports = function(app, express, passport, fs, Busboy, _, io){
 
   router.get('/download/:name', function(req, res){
     storage.bucket(req.user._id).file(req.params.name).createReadStream().pipe(res);
-    // fileStream.pipe(fs.createWriteStream('/local/photo.jpg'));
-    
-    // res.download(file,  function(err){
-    //   if (err) throw new Error(err);
-    // });
+  });
+
+  router.get('/delete/:name', function(req, res){
+    var file = storage.bucket(req.user._id).file(req.params.name);
+    file.delete(function(err, data){
+      if (err)
+        throw new Error(err)
+      res.sendStatus(204);
+    });
   });
 
   // show the login form
