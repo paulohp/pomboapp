@@ -5,12 +5,10 @@ module.exports = function(app, express, passport, fs, Busboy, _, io){
   var secret = require('../config/secret');
   var jwt    = require('jsonwebtoken');
   var User   = require('../models/user');
-  var Invite = require('../models/invite');
   var File   = require('../models/file');
   var gcloud = require('gcloud');
   var storage;
 
-  // From Google Compute Engine:
   storage = gcloud.storage({
     projectId: 'main-aspect-584',
     keyFilename: path.resolve('./', 'key.json')
@@ -26,7 +24,6 @@ module.exports = function(app, express, passport, fs, Busboy, _, io){
 
     var bucket = storage.bucket(req.user.id);
 
-    // Escutamos por erros e passamos adiante
     busboy.on('error', function(err){
         next(err);
     });
@@ -47,12 +44,9 @@ module.exports = function(app, express, passport, fs, Busboy, _, io){
       });
     });
 
-
     busboy.on('end', function(){
       res.send(200);
     });
-
-    // Não esquecer de mandar a requisição para o Busboy
     req.pipe(busboy);
 
   });
@@ -70,18 +64,14 @@ module.exports = function(app, express, passport, fs, Busboy, _, io){
     });
   });
 
-  // show the login form
   router.get('/login', function(req, res) {
-    // render the page and pass in any flash data if it exists
     res.render('user/login', { message: req.flash('loginMessage') });
   });
 
-  // process the login form
-  // app.post('/login', do all our passport stuff here);
   app.post('/login', passport.authenticate('local-login', {
-    successRedirect : '/profile', // redirect to the secure profile section
-    failureRedirect : '/login', // redirect back to the signup page if there is an error
-    failureFlash : true // allow flash messages
+    successRedirect : '/profile',
+    failureRedirect : '/login',
+    failureFlash : true
   }));
 
   router.post('/oauth',function(req, res) {
@@ -112,33 +102,21 @@ module.exports = function(app, express, passport, fs, Busboy, _, io){
     });
   });
 
-  // show the signup form
   router.get('/signup', function(req, res) {
-    // render the page and pass in any flash data if it exists
     res.render('user/signup', { message: req.flash('signupMessage') });
   });
 
 
   router.post('/signup', passport.authenticate('local-signup', {
-    successRedirect : '/profile', // redirect to the secure profile section
-    failureRedirect : '/signup', // redirect back to the signup page if there is an error
-    failureFlash : true // allow flash messages
+    successRedirect : '/profile',
+    failureRedirect : '/signup',
+    failureFlash : true
   }));
 
 
   router.get('/profile', isLoggedIn, function(req, res) {
     res.render('user/profile', {
-      user : req.user // get the user out of session and pass to template
-    });
-  });
-
-  router.post('/invite', function(req, res) {
-    var invite = new Invite();
-    invite.email = req.body.email;
-    invite.save(function(err, invite){
-      if(!err) {
-        res.send(200);
-      }
+      user : req.user
     });
   });
 
@@ -162,7 +140,6 @@ module.exports = function(app, express, passport, fs, Busboy, _, io){
 
   app.use('/', router);
 };
-
 
 function isLoggedIn(req, res, next) {
   if (req.isAuthenticated()){
