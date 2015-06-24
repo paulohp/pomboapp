@@ -4,7 +4,7 @@ var Profile = React.createClass({
       <div className="row">
         <div className="col-sm-6">
           <div className="well">
-            <p><strong>Paulo Pires </strong></p>
+            <p><strong>{this.props.name}</strong></p>
           </div>
         </div>
       </div>
